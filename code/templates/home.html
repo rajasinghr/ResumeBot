@@ -1,0 +1,58 @@
+<!DOCTYPE htm l>
+<html>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2 class="form-signin-heading">Carebot:-)</h2>
+
+    <div class="col-xs-2">
+    </div>
+    <div class="col-xs-6">
+      <input class="form-control" id="userMessage" type="text" placeholder="Type here . . .">
+    </div>
+    <br />
+    <div>
+      <ul class="list-group" id="chatWindow">
+
+      </ul>
+    </div>
+
+
+  </div>
+
+
+  <script>
+    $(document).ready(function() {
+      $('#userMessage').focus()
+      $('#userMessage').keypress(function(e) {
+        if (e.key === 'Enter') {
+          var userMessage = $('#userMessage').val();
+          $('#userMessage').val('');
+
+
+          $("#chatWindow").append("<li align= 'right' class='list-group-item list-group-item-secondary'>" + userMessage + "</li>");
+          $.ajax({
+            url: '/getResponse',
+            data: {
+              'userMessage': userMessage
+            },
+            type: 'GET',
+            success: function(response) {
+
+                $("#chatWindow").append("<li align= 'left' class='list-group-item list-group-item-primary'>" + response["result"] + "</li>");
+
+
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
