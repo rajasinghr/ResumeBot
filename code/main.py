@@ -1,8 +1,8 @@
 
 import nltk
 import numpy as np
-#import tflearn
-#import tensorflow as tf
+import tflearn
+import tensorflow as tf
 import random
 import nltk.corpus
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -21,7 +21,7 @@ from sklearn import svm
 app = Flask(__name__)
 vectorizer = CountVectorizer(ngram_range=(1,2),token_pattern=r'\b\w+\b',min_df=0)
 tfTransformer = TfidfTransformer(use_idf = True)
-svmClassifier = svm.SVC(kernel='linear', C = 1.0,probability=True)
+#svmClassifier = svm.SVC(kernel='linear', C = 1.0,probability=True)
 
 
 stopwords = nltk.corpus.stopwords.words('english')
@@ -40,24 +40,89 @@ def home():
 
 @app.route('/getResponse',methods=['GET'])
 def getResponse():
-    message = ''
+    actualMessage = ''
+    previousContext = ''
     if 'userMessage' in request.args:
-        message = request.args['userMessage']
-    print(message)
-    test_X = vectorizer.transform([message])
-    test_Y = tfTransformer.transform(test_X)
-    predicted_svm = svmClassifier.predict(test_Y)
+        actualMessage = request.args['userMessage']
+    if 'previousContext' in request.args:
+        previousContext = request.args['previousContext']
+    print(actualMessage)
+
+    message = cleanText(actualMessage)
+    test_Y = vectorizer.transform([message])
+    #test_Y = tfTransformer.transform(test_X)
+
+    ft = vectorizer.get_feature_names()
+    result = list(map(lambda row:dict(zip(ft,row)),test_Y.toarray()))
+    #print(result)
+    #print(list(result[0].values()))
+    result_array = model.predict([list(result[0].values())]).tolist()[0]
+    for item,score in zip(classes,result_array):
+        print(item+': '+str(score))
+
+    if max(result_array) > 0.4:
+        intentTag = classes[result_array.index(max(result_array))]
+    else:
+        intentTag = 'unknown'
+
+    #predicted_svm = svmClassifier.predict(test_Y)
+    #intentTag = predicted_svm[0]
+
+    for intent in intents:
+        if intent['tag'] == intentTag:
+            responseMsg = intent['responses'][0]
+            #print("Response:  "+responseMsg)
+            tag = intent['tag']
+            print("Tag:  "+tag)
+            context = intent['context']
+            print("Context:  "+context)
+            dataType = intent['type']
+            print("Data Type:  "+dataType)
+
+    #if tag == 'unknown' or tag == 'master' or tag == 'bachelor':
+    pos_tokens = nltk.pos_tag(nltk.word_tokenize(actualMessage.lower()))
+    print(pos_tokens)
+    print(previousContext)
+    if previousContext == 'master':
+        for word,token in pos_tokens:
+            if((token == 'WRB' and word=='where') or (word=='location')):
+                responseMsg = 'Florida, Tampa, United Status'
+            elif(token=='WDT'):
+                responseMsg = 'University of South Florida'
+            elif((token == 'WRB' and word=='when') or (word == 'year')) :
+                responseMsg = 'May 2020'
+            elif(word == 'gpa'):
+                responseMsg = '3.91 out of 4.0'
+        tag = previousContext
+    if previousContext == 'bachelor':
+        for word,token in pos_tokens:
+            if((token == 'WRB' and word=='where') or (word=='location')):
+                responseMsg = 'Trichy, India'
+            elif(token=='WDT'):
+                responseMsg = 'Anna University'
+            elif((token == 'WRB' and word=='when') or (word == 'year')):
+                responseMsg = 'May, 2014'
+            elif(word == 'gpa'):
+                responseMsg = '7.54 out of 10.0'
+        tag = previousContext
+
+    print("Response:  "+responseMsg)
+
+    #test_X = vectorizer.transform([message])
+    #test_Y = tfTransformer.transform(test_X)
+    #predicted_svm = svmClassifier.predict(test_Y)
 
     #ft = vectorizer.get_feature_names()
     #result = list(map(lambda row:dict(zip(ft,row)),test_Y.toarray()))
     #result_array = model.predict([list(result[0].values())]).tolist()[0]
     #returnClass = classes[result_array.index(max(result_array))]
-
-    return jsonify({"result":predicted_svm[0]})
+    #return (responseMsg,tag)
+    #return jsonify({"result":predicted_svm[0]})
+    return jsonify({"result":(responseMsg,tag)})
 
 
 def loadIntents():
-    with open('intents.json') as json_data:
+    with open('profile.json') as json_data:
         intents = json.load(json_data)
     return intents
 
@@ -71,10 +136,10 @@ def cleanText(summary):
 def loadData():
     classes = []
     # loop through each sentence in our intents patterns
-    for intent in loadIntents()['intents']:
+    intents = loadIntents()['intents']
+    for intent in intents:
         for pattern in intent['patterns']:
             documents.append((pattern, intent['tag']))
-            # add to our classes list
             if intent['tag'] not in classes:
                 classes.append(intent['tag'])
 
@@ -95,11 +160,27 @@ if __name__ == "__main__":
 
     try:
         loadData()
-        X = vectorizer.fit_transform([pattern for pattern,tag in documents])
-        Y = tfTransformer.fit_transform(X)
-        if(os.path.exists(modelPickleFileName) != True):
-            pickle_file = open(modelPickleFileName,'wb')
-            svmClassifier.fit(Y, list(tag for pattern,tag in documents))
+        Y = vectorizer.fit_transform([pattern for pattern,tag in documents])
+        #Y = tfTransformer.fit_transform(X)
+
+        # reset underlying graph data
+        tf.reset_default_graph()
+        # Build neural network
+        net = tflearn.input_data(shape=[None,len(Y.toarray().tolist()[0])])
+        net = tflearn.fully_connected(net, 8)
+        net = tflearn.fully_connected(net, 8)
+        net = tflearn.fully_connected(net, len(output[0]), activation='softmax')
+        net = tflearn.regression(net)
+
+        # Define model and setup tensorboard
+        model = tflearn.DNN(net, tensorboard_dir='tflearn_logs')
+        # Start training (apply gradient descent algorithm)
+        model.fit(Y.toarray().tolist(), output, n_epoch=1000, batch_size=8)
+        #model.save('model.tflearn')
+
+        #if(os.path.exists(modelPickleFileName) != True):
+            #pickle_file = open(modelPickleFileName,'wb')
+            #svmClassifier.fit(Y, list(tag for pattern,tag in documents))
             #tf.reset_default_graph()
             #net = tflearn.input_data(shape=[None, len(vectorizer.get_feature_names())])
             #net = tflearn.fully_connected(net, 8)
@@ -115,12 +196,12 @@ if __name__ == "__main__":
             #model.fit(Y.toarray(), output, n_epoch=1000, batch_size=8, show_metric=True)
             #model.save('model.tflearn')
 
-            pickle.dump(svmClassifier,pickle_file)
-            pickle_file.close()
-        else:
-            unpickle_file = open(modelPickleFileName,'rb')
-            svmClassifier = pickle.load(unpickle_file)
-            unpickle_file.close()
+            #pickle.dump(svmClassifier,pickle_file)
+            #pickle_file.close()
+        #else:
+            #unpickle_file = open(modelPickleFileName,'rb')
+            #svmClassifier = pickle.load(unpickle_file)
+            #unpickle_file.close()
         app.run(host='0.0.0.0',port=5001)
     finally:
         print("Exit")

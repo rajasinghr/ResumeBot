@@ -1,0 +1,66 @@
+{"intents": [
+        {"tag": "greeting",
+         "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day","Hey, How are you doing?"],
+         "responses": ["Hello, thanks for visiting", "Good to see you", "Hi there, how can I help?"],
+         "context": "",
+         "type":""
+        },
+        {"tag": "goodbye",
+         "patterns": ["Bye", "See you later", "Goodbye"],
+         "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."],
+         "context": "",
+         "type":""
+        },
+        {"tag": "thanks",
+         "patterns": ["Thanks", "Thank you", "That's helpful"],
+         "responses": ["Happy to help!", "Any time!", "My pleasure"],
+         "context": "",
+         "type":""
+        },
+        {"tag": "education",
+         "patterns": ["Tell about your educational qualifications",
+            "education details of him","Tell about his education"],
+         "responses": ["Master's Degree - University of South Florida, Tampa, Florida. \nBachelor's Degree - Saranathan College of Engineering, Trichy, India"],
+         "context":"education",
+         "type":"list"
+        },
+        {"tag": "bachelor",
+         "patterns": ["Tell about his bachelor's education",
+            "which year did he complete his bachelor","When did he complete",
+            "where did he complete his bachelor",
+            "what is his GPA in bachelor", "In which location did he do his bachelor","bachelor degree details"],
+         "responses":["Bachelor's Degree - Saranathan College of Engineering, Trichy, India"],
+         "specifics": [
+           {
+             "year":"May, 2014",
+             "location":"Trichy, Tamilnadu, India",
+             "major":"Electronics and Communication Engineering"
+           }
+         ],
+         "context":"bachelor",
+         "type":"data"
+        },
+        {"tag": "master",
+         "patterns": ["Tell about his master's education","which year did he complete his master degree","When did he complete",
+         "what is his GPA in masters","where did he complete his master's","In which location did he do his master education", "master degree details"],
+         "responses":["Master's Degree - University of South Florida, Tampa, Florida"],
+         "specifics": [
+           {
+             "year":"May, 2020",
+             "location":"Tampa, Florida",
+             "major":"Business Analytics and Information Systems"
+           }
+         ],
+         "context":"master",
+         "type":"data"
+       },
+       {
+         "tag":"unknown",
+         "patterns":["where did he do","when did he complete","in which location"],
+         "responses":["Please be specific, I am newly employed"],
+         "context": "",
+         "type":""
+       }
+
+   ]
+}

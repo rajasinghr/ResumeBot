@@ -8,7 +8,7 @@
 
 <body>
   <div class="container">
-    <h2 class="form-signin-heading">Resumebot:-)</h2>
+    <h2 class="form-signin-heading">Carebot:-)</h2>
 
     <div class="col-xs-2">
     </div>
@@ -34,18 +34,18 @@
         if (e.key === 'Enter') {
           var userMessage = $('#userMessage').val();
           $('#userMessage').val('');
-          //alert($('#prevContext').val())
+          alert($('#prevContext').val())
 
           $("#chatWindow").append("<li align= 'right' class='list-group-item list-group-item-secondary'>" + userMessage + "</li>");
           $.ajax({
             url: '/getResponse',
             data: {
               'userMessage': userMessage,
-              'previousContext': $('#prevContext').val()
+              'previousContext': $('#prevContext').val();
             },
             type: 'GET',
             success: function(response) {
-                console.log(response);
+
                 $("#chatWindow").append("<li align= 'left' class='list-group-item list-group-item-primary'>" + response["result"][0] + "</li>");
                 $('#prevContext').val(response["result"][1]);
 
