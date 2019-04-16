@@ -15,6 +15,7 @@
     <div class="col-xs-6">
       <input class="form-control" id="userMessage" type="text" placeholder="Type here . . .">
       <input hidden id="prevContext">
+      <input hidden id="sessionId">
     </div>
     <br />
     <div>
@@ -41,7 +42,8 @@
             url: '/getResponse',
             data: {
               'userMessage': userMessage,
-              'previousContext': $('#prevContext').val()
+              'previousContext': $('#prevContext').val(),
+              'sessionId':$('#sessionId').val()
             },
             type: 'GET',
             success: function(response) {
