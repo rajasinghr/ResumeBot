@@ -20,7 +20,7 @@
         {"tag": "education",
          "patterns": ["Tell about your educational qualifications",
             "education details of him","Tell about his education"],
-         "responses": ["Master's Degree - University of South Florida, Tampa, Florida. \nBachelor's Degree - Saranathan College of Engineering, Trichy, India"],
+         "responses": ["Master's Degree - University of South Florida, Tampa, Florida. <br/>Bachelor's Degree - Saranathan College of Engineering, Trichy, India"],
          "context":"education",
          "type":"list"
         },
@@ -34,7 +34,9 @@
            {
              "year":"May, 2014",
              "location":"Trichy, Tamilnadu, India",
-             "major":"Electronics and Communication Engineering"
+             "major":"Electronics and Communication Engineering",
+             "university":"Anna University",
+             "gpa":"7.54 out of 10.0"
            }
          ],
          "context":"bachelor",
@@ -48,7 +50,9 @@
            {
              "year":"May, 2020",
              "location":"Tampa, Florida",
-             "major":"Business Analytics and Information Systems"
+             "major":"Business Analytics and Information Systems",
+             "university":"University of South Florida",
+             "gpa":"3.91 out of 4.0"
            }
          ],
          "context":"master",
@@ -60,7 +64,75 @@
          "responses":["Please be specific, I am newly employed"],
          "context": "",
          "type":""
+       },
+       {
+         "tag":"skills",
+         "patterns": ["what are your core skills", "what are your primary skills", "what is your primary skillset"],
+         "responses": ["My primary skills are Python, Big Data, Tableau, Machine Learning"],
+         "specifics": [
+           {
+             "reporting":["I have experience on reporting tooks like Tableau, as a part of my curriculum and have done project as well"],
+             "big data":["I have knowledge and experience on working in Hadoop, PySpark and Hive"],
+             "machine learning":["I have the knowledge of building machine learning models like Neural networks, SVM, Ensembles"]
+           }
+         ],
+         "context": "skills",
+         "type":"data"
+       },
+       {
+         "tag":"past_experience",
+         "patterns":["tell us about your past work experience", "where did you work previously"],
+         "responses": ["I previously worked in Tata Consultancy Services Pvt. Ltd."],
+         "specifics": [
+           {
+             "start_date":["I joined on Aug, 2014"],
+             "end_date":["I resigned on May, 2018"],
+             "duration":["I worked at TCS for 4 years"],
+             "location":["I worked in Chennai"],
+             "company":["I worked in TCS Pvt. Ltd."],
+             "project":["I developed and maintained a tool called DocuMaker. I built a JAVA application to support that."]
+           }
+         ],
+         "context": "past_experience",
+         "type":"data"
+       },
+       {
+         "tag":"current_experience",
+         "patterns":["where do you work currently", "where do you presently work","where do you work now"],
+         "responses": ["I am currently working as a Graduate Assistant at the University of South Florida"],
+         "specifics": [
+           {
+             "start_date":["I joined on Aug, 2018"],
+             "end_date":["I am currently working here"],
+             "duration":["I am working here for 9 months"],
+             "location":["I am working in Tampa, Florida"],
+             "company":["I am working at the University of South Florida"],
+             "project":["I grade student assignments"]
+           }
+         ],
+         "context": "current_experience",
+         "type":"data"
+       },
+       {
+         "tag": "salary",
+         "patterns": ["What is your expected Salary", "What is your expected"],
+         "responses": ["My expected salary is $80k/year"],
+         "context": "salary",
+         "type":"data"
+       },
+       {
+         "tag": "relocation",
+         "patterns": ["Are you willing to relocate","Are you open to relocation"],
+         "responses": ["Yes, I am open to relocation"],
+         "context": "relocation",
+         "type":"data"
+       },
+       {
+         "tag": "sponsorship",
+         "patterns": ["Will you be requiring sponsorship in the future"],
+         "responses": ["Yes, I require H1-B sponsorship in the future"],
+         "context": "sponsorship",
+         "type":"data"
        }
-
    ]
 }

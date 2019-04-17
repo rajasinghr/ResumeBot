@@ -17,6 +17,9 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from sklearn import svm
+import sqlite3
+import datetime
+import time
 
 app = Flask(__name__)
 vectorizer = CountVectorizer(ngram_range=(1,2),token_pattern=r'\b\w+\b',min_df=0)
@@ -26,7 +29,9 @@ tfTransformer = TfidfTransformer(use_idf = True)
 
 stopwords = nltk.corpus.stopwords.words('english')
 stopwords.extend(string.punctuation)
-stopwords.remove('not')
+ignoreWords = ['not','i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'when', 'where', 'why', 'how', 'don', "don't", 'should', "should've", "?"]
+for word in ignoreWords:
+    stopwords.remove(word)
 lemmatizer = WordNetLemmatizer()
 classes = []
 documents = []
@@ -42,15 +47,19 @@ def home():
 def getResponse():
     actualMessage = ''
     previousContext = ''
+    sessionId = ''
     if 'userMessage' in request.args:
         actualMessage = request.args['userMessage']
     if 'previousContext' in request.args:
         previousContext = request.args['previousContext']
+    if 'sessionId' in request.args:
+        sessionId = request.args['sessionId']
+        print(sessionId)
     print(actualMessage)
 
     message = cleanText(actualMessage)
-    test_Y = vectorizer.transform([message])
-    #test_Y = tfTransformer.transform(test_X)
+    test_X = vectorizer.transform([message])
+    test_Y = tfTransformer.transform(test_X)
 
     ft = vectorizer.get_feature_names()
     result = list(map(lambda row:dict(zip(ft,row)),test_Y.toarray()))
@@ -83,29 +92,80 @@ def getResponse():
     pos_tokens = nltk.pos_tag(nltk.word_tokenize(actualMessage.lower()))
     print(pos_tokens)
     print(previousContext)
-    if previousContext == 'master':
-        for word,token in pos_tokens:
-            if((token == 'WRB' and word=='where') or (word=='location')):
-                responseMsg = 'Florida, Tampa, United Status'
-            elif(token=='WDT'):
-                responseMsg = 'University of South Florida'
-            elif((token == 'WRB' and word=='when') or (word == 'year')) :
-                responseMsg = 'May 2020'
-            elif(word == 'gpa'):
-                responseMsg = '3.91 out of 4.0'
-        tag = previousContext
-    if previousContext == 'bachelor':
-        for word,token in pos_tokens:
-            if((token == 'WRB' and word=='where') or (word=='location')):
-                responseMsg = 'Trichy, India'
-            elif(token=='WDT'):
-                responseMsg = 'Anna University'
-            elif((token == 'WRB' and word=='when') or (word == 'year')):
-                responseMsg = 'May, 2014'
-            elif(word == 'gpa'):
-                responseMsg = '7.54 out of 10.0'
-        tag = previousContext
 
+    if intentTag == 'unknown':
+        context = previousContext
+    if (intentTag == 'unknown' and previousContext == 'master') or (context == 'master'):
+        for word,token in pos_tokens:
+            if((token == 'WRB' and word=='where') or (word=='location')):
+                responseMsg = intents[5]['specifics'][0]['location']
+            elif(token=='WDT'):
+                responseMsg = intents[5]['specifics'][0]['university']
+            elif((token == 'WRB' and word=='when') or (word == 'year')) :
+                responseMsg = intents[5]['specifics'][0]['year']
+            elif(word == 'gpa'):
+                responseMsg = intents[5]['specifics'][0]['gpa']
+            elif(word == 'major'):
+                responseMsg = intents[5]['specifics'][0]['major']
+
+    if (intentTag == 'unknown' and previousContext == 'bachelor') or (context == 'bachelor'):
+        for word,token in pos_tokens:
+            if((token == 'WRB' and word=='where') or (word=='location')):
+                responseMsg = intents[4]['specifics'][0]['location']
+            elif(token=='WDT'):
+                responseMsg = intents[4]['specifics'][0]['university']
+            elif((token == 'WRB' and word=='when') or (word == 'year')) :
+                responseMsg = intents[4]['specifics'][0]['year']
+            elif(word == 'gpa'):
+                responseMsg = intents[4]['specifics'][0]['gpa']
+            elif(word == 'major'):
+                responseMsg = intents[4]['specifics'][0]['major']
+
+    if (intentTag == 'unknown' and previousContext == 'skills') or (context == 'skills'):
+        if "machine learning" in message:
+            responseMsg = intents[7]['specifics'][0]['machine learning'][0]
+        elif "big data" in message:
+            responseMsg = intents[7]['specifics'][0]['big data'][0]
+        elif "reporting" in message:
+            responseMsg = intents[7]['specifics'][0]['reporting'][0]
+
+    if (intentTag == 'unknown' and previousContext == 'past_experience') or (context == 'past_experience'):
+        for word,token in pos_tokens:
+            if((token == 'WRB' and word=='where') or (word=='location')):
+                responseMsg = intents[8]['specifics'][0]['location'][0]
+            elif(token=='WDT'):
+                responseMsg = intents[8]['specifics'][0]['university'][0]
+            elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                responseMsg = intents[8]['specifics'][0]['start_date'][0]
+            elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                responseMsg = intents[8]['specifics'][0]['end_date'][0]
+            elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
+                responseMsg = intents[8]['specifics'][0]['duration'][0]
+            elif(word == 'project' or word=='do'):
+                responseMsg = intents[8]['specifics'][0]['project'][0]
+            elif(token=='WDT' and word == 'company'):
+                responseMsg = intents[8]['specifics'][0]['company'][0]
+
+        if (intentTag == 'unknown' and previousContext == 'current_experience') or (context == 'current_experience'):
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    responseMsg = intents[9]['specifics'][0]['location'][0]
+                elif(token=='WDT'):
+                    responseMsg = intents[9]['specifics'][0]['university'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    responseMsg = intents[9]['specifics'][0]['start_date'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    responseMsg = intents[9]['specifics'][0]['end_date'][0]
+                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
+                    responseMsg = intents[9]['specifics'][0]['duration'][0]
+                elif(word == 'project' or word=='do'):
+                    responseMsg = intents[9]['specifics'][0]['project'][0]
+                elif(token=='WDT' and word == 'company'):
+                    responseMsg = intents[9]['specifics'][0]['company'][0]
+
+
+
+    sessionId = dbInsert(sessionId,message,responseMsg,context,previousContext)
     print("Response:  "+responseMsg)
 
     #test_X = vectorizer.transform([message])
@@ -120,9 +180,48 @@ def getResponse():
     #return jsonify({"result":predicted_svm[0]})
     result = []
     result.append(responseMsg)
-    result.append(tag)
+    result.append(context)
+    result.append(sessionId)
     return jsonify({"result":result})
 
+def dbDelete(query):
+    conn = sqlite3.connect('resume.db')
+    c = conn.cursor()
+    c.execute(query) #"DELETE FROM conversations"
+    conn.commit()
+    conn.close()
+
+def dbCreate():
+    conn = sqlite3.connect('resume.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS conversations (sessionId integer PRIMARY KEY, userMessage text, botResponse text, responseContext text, previousResponseContext text, insertedDate timestamp)''')
+    conn.commit()
+    conn.close()
+
+def dbInsert(sessionId,userMessage,botResponse,respContext,prevContext):
+    conn = sqlite3.connect('resume.db')
+    c = conn.cursor()
+    if sessionId == None or sessionId == '':
+        c.execute('''SELECT MAX(sessionId) FROM conversations''')
+        sessionId = c.fetchone()[0]+1
+    elif sessionId == 0:
+        sessionId = 1
+    insertValues = (sessionId,userMessage,botResponse,respContext,prevContext,datetime.datetime.now())
+    print(insertValues)
+    print(c.execute('''INSERT INTO conversations VALUES (?,?,?,?,?,?)''',insertValues))
+    conn.commit()
+    conn.close()
+    return sessionId
+
+def dbSelect(sessionId):
+    session = (sessionId,)
+    conn = sqlite3.connect('resume.db')
+    c = conn.cursor()
+    c.execute('''SELECT * FROM conversations where sessionId = ?''',session)
+    all_rows = c.fetchall()
+    conn.commit()
+    conn.close()
+    return all_rows
 
 def loadIntents():
     with open('profile.json') as json_data:
@@ -132,9 +231,11 @@ def loadIntents():
 
 def cleanText(summary):
     summary = summary.replace('*','').replace('-',' ').replace('/',' ').replace("'",' ')
-    #tokens_summary = [str.lower().strip(string.punctuation) for str in summary.split() if str not in stopwords]
-    tokens_summary = [str.lower().strip(string.punctuation) for str in summary.split()]
+    summary_new = [word for word,tag in nltk.pos_tag(nltk.word_tokenize(summary.lower())) if tag not in ['PRP','IN','PRP$','TO','UH']]
+    tokens_summary = [str.lower().strip(string.punctuation) for str in summary_new if str not in stopwords]
+    #tokens_summary = [str.lower().strip(string.punctuation) for str in summary.split()]
     lemma_summary = [lemmatizer.lemmatize(token) for token in tokens_summary if len(token) > 0]
+    print(' '.join(word for word in lemma_summary))
     return(' '.join(word for word in lemma_summary))
 
 def loadData():
@@ -164,8 +265,8 @@ if __name__ == "__main__":
 
     try:
         classes, intents = loadData()
-        Y = vectorizer.fit_transform([cleanText(pattern) for pattern,tag in documents])
-        #Y = tfTransformer.fit_transform(X)
+        X = vectorizer.fit_transform([cleanText(pattern) for pattern,tag in documents])
+        Y = tfTransformer.fit_transform(X)
 
         # reset underlying graph data
         tf.reset_default_graph()

@@ -10,6 +10,14 @@
   <div class="container">
     <h2 class="form-signin-heading">Resumebot:-)</h2>
 
+
+    <br />
+    <div>
+      <ul class="list-group" id="chatWindow" style="overflow:auto;height:600px">
+
+      </ul>
+    </div>
+    <br/>
     <div class="col-xs-2">
     </div>
     <div class="col-xs-6">
@@ -17,13 +25,6 @@
       <input hidden id="prevContext">
       <input hidden id="sessionId">
     </div>
-    <br />
-    <div>
-      <ul class="list-group" id="chatWindow">
-
-      </ul>
-    </div>
-
 
   </div>
 
@@ -35,7 +36,6 @@
         if (e.key === 'Enter') {
           var userMessage = $('#userMessage').val();
           $('#userMessage').val('');
-          //alert($('#prevContext').val())
 
           $("#chatWindow").append("<li align= 'right' class='list-group-item list-group-item-secondary'>" + userMessage + "</li>");
           $.ajax({
@@ -50,7 +50,9 @@
                 console.log(response);
                 $("#chatWindow").append("<li align= 'left' class='list-group-item list-group-item-primary'>" + response["result"][0] + "</li>");
                 $('#prevContext').val(response["result"][1]);
-
+                $('#sessionId').val(response["result"][2]);
+                var element = document.getElementById("chatWindow");
+                element.scrollTop = element.scrollHeight;
             }
           });
         }
