@@ -24,7 +24,7 @@ import time
 app = Flask(__name__)
 vectorizer = CountVectorizer(ngram_range=(1,2),token_pattern=r'\b\w+\b',min_df=0)
 tfTransformer = TfidfTransformer(use_idf = True)
-#svmClassifier = svm.SVC(kernel='linear', C = 1.0,probability=True)
+svmClassifier = svm.SVC(kernel='linear', C = 1.0,probability=True)
 
 
 stopwords = nltk.corpus.stopwords.words('english')
@@ -65,6 +65,7 @@ def getResponse():
     result = list(map(lambda row:dict(zip(ft,row)),test_Y.toarray()))
     #print(result)
     #print(list(result[0].values()))
+
     result_array = model.predict([list(result[0].values())]).tolist()[0]
     for item,score in zip(classes,result_array):
         print(item+': '+str(score))
@@ -76,6 +77,8 @@ def getResponse():
 
     #predicted_svm = svmClassifier.predict(test_Y)
     #intentTag = predicted_svm[0]
+    #print(svmClassifier.predict_proba(test_Y))
+    #print(svmClassifier.classes_)
 
     for intent in intents:
         if intent['tag'] == intentTag:
@@ -267,6 +270,7 @@ if __name__ == "__main__":
         classes, intents = loadData()
         X = vectorizer.fit_transform([cleanText(pattern) for pattern,tag in documents])
         Y = tfTransformer.fit_transform(X)
+        #svmClassifier.fit(Y, list(tag for pattern,tag in documents))
 
         # reset underlying graph data
         tf.reset_default_graph()
