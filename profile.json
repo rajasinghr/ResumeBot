@@ -133,6 +133,13 @@
          "responses": ["Yes, I require H1-B sponsorship in the future"],
          "context": "sponsorship",
          "type":"data"
+       },
+       {
+        "tag": "aboutme",
+        "patterns": ["Who is he","what is his name","Tell about Raja Singh Ravi"],
+        "responses": ["Raja Singh Ravi, a graduate student from the University of South Florida."],
+        "context": "",
+        "type":""
        }
    ]
 }

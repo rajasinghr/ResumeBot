@@ -1,4 +1,3 @@
-
 import nltk
 import numpy as np
 import tflearn
@@ -20,38 +19,21 @@ from sklearn import svm
 import sqlite3
 import datetime
 import time
+import spacy
+from spacy import displacy
+from collections import Counter
+import en_core_web_sm
 
-app = Flask(__name__)
-resumeBot = ResumeBot()
 
-@app.route('/')
-def home():
-    return render_template("home.html")
-
-@app.route('/getResponse',methods=['GET'])
-def getResponse():
-    actualMessage = ''
-    previousContext = ''
-    sessionId = ''
-    if 'userMessage' in request.args:
-        actualMessage = request.args['userMessage']
-    if 'previousContext' in request.args:
-        previousContext = request.args['previousContext']
-    if 'sessionId' in request.args:
-        sessionId = request.args['sessionId']
-        print(sessionId)
-    print(actualMessage)
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-    return jsonify({"result":result})
 
 class ResumeBot:
     def __init__(self):
-        self.vectorizer = CountVectorizer(ngram_range=(1,2),token_pattern=r'\b\w+\b',min_df=0)
+        self.vectorizer = CountVectorizer(token_pattern=r'\b\w+\b',min_df=0)
         self.tfTransformer = TfidfTransformer(use_idf = True)
         self.svmClassifier = svm.SVC(kernel='linear', C = 1.0,probability=True)
         self.stopwords = nltk.corpus.stopwords.words('english')
         self.stopwords.extend(string.punctuation)
-        ignoreWords = ['not','i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'when', 'where', 'why', 'how', 'don', "don't", 'should', "should've", "?"]
+        ignoreWords = ['not','what', 'which', 'who', 'whom', 'do', 'does', 'did', 'when', 'where', 'why', 'how']
         for word in ignoreWords:
             self.stopwords.remove(word)
         self.lemmatizer = WordNetLemmatizer()
@@ -64,7 +46,7 @@ class ResumeBot:
         self.classes, self.intents = self.loadData()
         X = self.vectorizer.fit_transform([self.cleanText(pattern) for pattern,tag in self.documents])
         Y = self.tfTransformer.fit_transform(X)
-        #svmClassifier.fit(Y, list(tag for pattern,tag in documents))
+        #self.svmClassifier.fit(Y, list(tag for pattern,tag in documents))
 
         # reset underlying graph data
         tf.reset_default_graph()
@@ -80,6 +62,15 @@ class ResumeBot:
         # Start training (apply gradient descent algorithm)
         self.model.fit(Y.toarray().tolist(), self.output, n_epoch=1000, batch_size=8)
         #model.save('model.tflearn')
+
+    def cleanText(self,summary):
+        summary = summary.replace('*','').replace('-',' ').replace('/',' ').replace("'",' ')
+        summary_new = [word for word,tag in nltk.pos_tag(nltk.word_tokenize(summary.lower())) if tag not in ['CC','DT','EX','MD','PRP','IN','PRP$','RP','TO','UH']]
+        tokens_summary = [str.lower().strip(string.punctuation) for str in summary_new if str not in self.stopwords]
+        #tokens_summary = [str.lower().strip(string.punctuation) for str in summary.split()]
+        lemma_summary = [self.lemmatizer.lemmatize(token) for token in tokens_summary if len(token) > 0]
+        print(' '.join(word for word in lemma_summary))
+        return(' '.join(word for word in lemma_summary))
 
 
     def loadData(self):
@@ -100,6 +91,57 @@ class ResumeBot:
             output_row[classes.index(doc[1])] = 1
             self.output.append(output_row)
         return (classes,intents)
+
+    def checkIsItName(self,userMessage):
+        response = ''
+        nlp = en_core_web_sm.load()
+        doc = nlp(userMessage)
+        isEntity = False
+        for entry in doc.ents:
+            if entry.label_ == 'PERSON':
+                response = 'Hi '+entry.text+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
+                isEntity = True
+                break
+        if not isEntity:
+            tags = nltk.pos_tag(nltk.word_tokenize(userMessage))
+            currentIndex = 0
+            flag = False
+            for word, tag in tags:
+                if(tag == 'VBZ' or tag == 'VBP'):
+                    flag = True
+                    break
+                currentIndex+=1
+            if flag:
+                name = ''
+                for index in range(currentIndex+1,len(tags)):
+                    if tags[index][1] == '.':
+                        break
+                    else:
+                        print(tags[index])
+                        name += ' '+tags[index][0]
+                response = 'Hi'+name+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
+        return response
+
+    def checkPatternBeforeModel(self,actualMessage,previousContext,sessionId):
+        response = ''
+        if sessionId == '' or sessionId == None:
+            responseMsg = self.checkIsItName(message)
+            return responseMsg
+        tags = tags = nltk.pos_tag(nltk.word_tokenize(actualMessage))
+        patternTag = '-->'.join(word+'->'+tag for word,tag in tags)
+        if patternTag == 'who->WP-->are->VBP-->you->PRP' or patternTag == 'what->WP-->is->VBZ-->your->PRP$-->name->NN':
+            responseMsg = 'I am a bot. I am here to help you to know about Raja Singh Ravi. <br/> Ask Questions related to his professional career'
+            return responseMsg
+        
+
+
+        return response
+
+    def checkPatternAfterModel(self,actualMessage,intent, currentContext, previousContext,sessionId):
+        response = ''
+
+        return response
+
 
     def getBotResponse(self,actualMessage,previousContext,sessionId):
         message = self.cleanText(actualMessage)
@@ -212,7 +254,6 @@ class ResumeBot:
                         responseMsg = self.intents[9]['specifics'][0]['company'][0]
 
 
-
         sessionId = self.dbInsert(sessionId,message,responseMsg,context,previousContext)
         print("Response:  "+responseMsg)
 
@@ -261,6 +302,7 @@ class ResumeBot:
         conn.close()
         return sessionId
 
+
     def dbSelect(self,sessionId):
         session = (sessionId,)
         conn = sqlite3.connect('resume.db')
@@ -276,15 +318,28 @@ class ResumeBot:
             self.intents = json.load(json_data)
         return self.intents
 
+app = Flask(__name__)
+resumeBot = ResumeBot()
 
-    def cleanText(self,summary):
-        summary = summary.replace('*','').replace('-',' ').replace('/',' ').replace("'",' ')
-        summary_new = [word for word,tag in nltk.pos_tag(nltk.word_tokenize(summary.lower())) if tag not in ['PRP','IN','PRP$','TO','UH']]
-        tokens_summary = [str.lower().strip(string.punctuation) for str in summary_new if str not in self.stopwords]
-        #tokens_summary = [str.lower().strip(string.punctuation) for str in summary.split()]
-        lemma_summary = [self.lemmatizer.lemmatize(token) for token in tokens_summary if len(token) > 0]
-        print(' '.join(word for word in lemma_summary))
-        return(' '.join(word for word in lemma_summary))
+@app.route('/')
+def home():
+    return render_template("home.html")
+
+@app.route('/getResponse',methods=['GET'])
+def getResponse():
+    actualMessage = ''
+    previousContext = ''
+    sessionId = ''
+    if 'userMessage' in request.args:
+        actualMessage = request.args['userMessage']
+    if 'previousContext' in request.args:
+        previousContext = request.args['previousContext']
+    if 'sessionId' in request.args:
+        sessionId = request.args['sessionId']
+        print(sessionId)
+    print(actualMessage)
+    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
+    return jsonify({"result":result})
 
 
 
