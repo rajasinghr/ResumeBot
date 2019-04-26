@@ -23,6 +23,8 @@ import spacy
 from spacy import displacy
 from collections import Counter
 import en_core_web_sm
+import random
+from gingerit.gingerit import GingerIt
 
 
 
@@ -96,10 +98,11 @@ class ResumeBot:
         response = ''
         nlp = en_core_web_sm.load()
         doc = nlp(userMessage)
+        print(doc.ents)
         isEntity = False
         for entry in doc.ents:
             if entry.label_ == 'PERSON':
-                response = 'Hi '+entry.text+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
+                response = 'Hi '+entry.text[0].upper()+entry.text[1:]+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
                 isEntity = True
                 break
         if not isEntity:
@@ -119,31 +122,108 @@ class ResumeBot:
                     else:
                         print(tags[index])
                         name += ' '+tags[index][0]
-                response = 'Hi'+name+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
+                response = 'Hi'+name[0].upper()+name[1:]+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
+            else:
+                response = 'Hi '+userMessage[0].upper()+userMessage[1:]+", Nice to meet you. You can ask questions to know about Raja Singh's professional career."
+        print(response)
         return response
 
-    def checkPatternBeforeModel(self,actualMessage,previousContext,sessionId):
+    def checkPattern(self,actualMessage,currentContext, previousContext,sessionId,modelResponse):
         response = ''
-        if sessionId == '' or sessionId == None:
-            responseMsg = self.checkIsItName(message)
-            return responseMsg
-        tags = tags = nltk.pos_tag(nltk.word_tokenize(actualMessage))
-        patternTag = '-->'.join(word+'->'+tag for word,tag in tags)
-        if patternTag == 'who->WP-->are->VBP-->you->PRP' or patternTag == 'what->WP-->is->VBZ-->your->PRP$-->name->NN':
-            responseMsg = 'I am a bot. I am here to help you to know about Raja Singh Ravi. <br/> Ask Questions related to his professional career'
-            return responseMsg
-        
+        pos_tokens = nltk.pos_tag(nltk.word_tokenize(actualMessage.lower()))
+        patternTag = '-->'.join(word+'->'+tag for word,tag in pos_tokens)
+        print(patternTag)
+        if patternTag == 'who->WP-->are->VBP-->you->PRP-->?->.' or patternTag == 'what->WP-->is->VBZ-->your->PRP$-->name->NN-->?->.':
+            print(patternTag)
+            response = 'I am a bot. I am here to help you to know about Raja Singh Ravi. <br/> Ask Questions related to his professional career'
+            return response
+        #modelIntent = currentContext
+        #context = ''
+        #if modelIntent == 'unknown':
+        #    context = previousContext
+        print("Check pattern function")
+        print("current cxt: "+ currentContext)
+        print("previous cxt: "+ previousContext)
+        if (currentContext == 'unknown' and previousContext == 'master') or (currentContext == 'master'):
+
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    response = self.intents[5]['specifics'][0]['location']
+                elif(token=='WDT'):
+                    response = self.intents[5]['specifics'][0]['university']
+                elif((token == 'WRB' and word=='when') or (word == 'year')) :
+                    response = self.intents[5]['specifics'][0]['year']
+                elif(word == 'gpa'):
+                    response = self.intents[5]['specifics'][0]['gpa']
+                elif(word == 'major'):
+                    response = self.intents[5]['specifics'][0]['major']
+            return response
+
+        if (currentContext == 'unknown' and previousContext == 'bachelor') or (currentContext == 'bachelor'):
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    response = self.intents[4]['specifics'][0]['location']
+                elif(token=='WDT'):
+                    response = self.intents[4]['specifics'][0]['university']
+                elif((token == 'WRB' and word=='when') or (word == 'year')) :
+                    response = self.intents[4]['specifics'][0]['year']
+                elif(word == 'gpa'):
+                    response = self.intents[4]['specifics'][0]['gpa']
+                elif(word == 'major'):
+                    response = self.intents[4]['specifics'][0]['major']
+            return response
+
+        if (currentContext == 'unknown' and previousContext == 'skills') or (currentContext == 'skills'):
+            if "machine learning" in message:
+                response = self.intents[7]['specifics'][0]['machine learning'][0]
+            elif "big data" in message:
+                response = self.intents[7]['specifics'][0]['big data'][0]
+            elif "reporting" in message:
+                response = self.intents[7]['specifics'][0]['reporting'][0]
+            return response
+
+        if (currentContext == 'unknown' and previousContext == 'past_experience') or (currentContext == 'past_experience'):
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    response = self.intents[8]['specifics'][0]['location'][0]
+                elif(token=='WDT'):
+                    response = self.intents[8]['specifics'][0]['university'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[8]['specifics'][0]['start_date'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[8]['specifics'][0]['end_date'][0]
+                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
+                    response = self.intents[8]['specifics'][0]['duration'][0]
+                elif(word == 'project' or word=='do'):
+                    response = self.intents[8]['specifics'][0]['project'][0]
+                elif(token=='WDT' and word == 'company'):
+                    response = self.intents[8]['specifics'][0]['company'][0]
+            return response
+
+        if (currentContext == 'unknown' and previousContext == 'current_experience') or (currentContext == 'current_experience'):
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    response = self.intents[9]['specifics'][0]['location'][0]
+                elif(token=='WDT'):
+                    response = self.intents[9]['specifics'][0]['university'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[9]['specifics'][0]['start_date'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[9]['specifics'][0]['end_date'][0]
+                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
+                    response = self.intents[9]['specifics'][0]['duration'][0]
+                elif(word == 'project' or word=='do'):
+                    response = self.intents[9]['specifics'][0]['project'][0]
+                elif(token=='WDT' and word == 'company'):
+                    response = self.intents[9]['specifics'][0]['company'][0]
+            return response
+
+        if response == '':
+            return modelResponse
 
 
-        return response
 
-    def checkPatternAfterModel(self,actualMessage,intent, currentContext, previousContext,sessionId):
-        response = ''
-
-        return response
-
-
-    def getBotResponse(self,actualMessage,previousContext,sessionId):
+    def getModelResult(self,actualMessage,previousContext,sessionId):
         message = self.cleanText(actualMessage)
         test_X = self.vectorizer.transform([message])
         test_Y = self.tfTransformer.transform(test_X)
@@ -153,122 +233,51 @@ class ResumeBot:
         #print(result)
         #print(list(result[0].values()))
 
-        result_array = self.model.predict([list(result[0].values())]).tolist()[0]
-        for item,score in zip(self.classes,result_array):
-            print(item+': '+str(score))
-        print(self.classes)
-        if max(result_array) > 0.4:
-            intentTag = self.classes[result_array.index(max(result_array))]
-        else:
-            intentTag = 'unknown'
-
         #predicted_svm = svmClassifier.predict(test_Y)
         #intentTag = predicted_svm[0]
         #print(svmClassifier.predict_proba(test_Y))
         #print(svmClassifier.classes_)
 
-        for intent in self.intents:
-            if intent['tag'] == intentTag:
-                responseMsg = intent['responses'][0]
-                #print("Response:  "+responseMsg)
-                tag = intent['tag']
-                print("Tag:  "+tag)
-                context = intent['context']
-                print("Context:  "+context)
-                dataType = intent['type']
-                print("Data Type:  "+dataType)
-
-        #if tag == 'unknown' or tag == 'master' or tag == 'bachelor':
-        pos_tokens = nltk.pos_tag(nltk.word_tokenize(actualMessage.lower()))
-        print(pos_tokens)
-        print(previousContext)
-
-        if intentTag == 'unknown':
-            context = previousContext
-        if (intentTag == 'unknown' and previousContext == 'master') or (context == 'master'):
-            for word,token in pos_tokens:
-                if((token == 'WRB' and word=='where') or (word=='location')):
-                    responseMsg = self.intents[5]['specifics'][0]['location']
-                elif(token=='WDT'):
-                    responseMsg = self.intents[5]['specifics'][0]['university']
-                elif((token == 'WRB' and word=='when') or (word == 'year')) :
-                    responseMsg = self.intents[5]['specifics'][0]['year']
-                elif(word == 'gpa'):
-                    responseMsg = self.intents[5]['specifics'][0]['gpa']
-                elif(word == 'major'):
-                    responseMsg = self.intents[5]['specifics'][0]['major']
-
-        if (intentTag == 'unknown' and previousContext == 'bachelor') or (context == 'bachelor'):
-            for word,token in pos_tokens:
-                if((token == 'WRB' and word=='where') or (word=='location')):
-                    responseMsg = self.intents[4]['specifics'][0]['location']
-                elif(token=='WDT'):
-                    responseMsg = self.intents[4]['specifics'][0]['university']
-                elif((token == 'WRB' and word=='when') or (word == 'year')) :
-                    responseMsg = self.intents[4]['specifics'][0]['year']
-                elif(word == 'gpa'):
-                    responseMsg = self.intents[4]['specifics'][0]['gpa']
-                elif(word == 'major'):
-                    responseMsg = self.intents[4]['specifics'][0]['major']
-
-        if (intentTag == 'unknown' and previousContext == 'skills') or (context == 'skills'):
-            if "machine learning" in message:
-                responseMsg = self.intents[7]['specifics'][0]['machine learning'][0]
-            elif "big data" in message:
-                responseMsg = self.intents[7]['specifics'][0]['big data'][0]
-            elif "reporting" in message:
-                responseMsg = self.intents[7]['specifics'][0]['reporting'][0]
-
-        if (intentTag == 'unknown' and previousContext == 'past_experience') or (context == 'past_experience'):
-            for word,token in pos_tokens:
-                if((token == 'WRB' and word=='where') or (word=='location')):
-                    responseMsg = self.intents[8]['specifics'][0]['location'][0]
-                elif(token=='WDT'):
-                    responseMsg = self.intents[8]['specifics'][0]['university'][0]
-                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
-                    responseMsg = self.intents[8]['specifics'][0]['start_date'][0]
-                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
-                    responseMsg = self.intents[8]['specifics'][0]['end_date'][0]
-                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
-                    responseMsg = self.intents[8]['specifics'][0]['duration'][0]
-                elif(word == 'project' or word=='do'):
-                    responseMsg = self.intents[8]['specifics'][0]['project'][0]
-                elif(token=='WDT' and word == 'company'):
-                    responseMsg = self.intents[8]['specifics'][0]['company'][0]
-
-            if (intentTag == 'unknown' and previousContext == 'current_experience') or (context == 'current_experience'):
-                for word,token in pos_tokens:
-                    if((token == 'WRB' and word=='where') or (word=='location')):
-                        responseMsg = self.intents[9]['specifics'][0]['location'][0]
-                    elif(token=='WDT'):
-                        responseMsg = self.intents[9]['specifics'][0]['university'][0]
-                    elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
-                        responseMsg = self.intents[9]['specifics'][0]['start_date'][0]
-                    elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
-                        responseMsg = self.intents[9]['specifics'][0]['end_date'][0]
-                    elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
-                        responseMsg = self.intents[9]['specifics'][0]['duration'][0]
-                    elif(word == 'project' or word=='do'):
-                        responseMsg = self.intents[9]['specifics'][0]['project'][0]
-                    elif(token=='WDT' and word == 'company'):
-                        responseMsg = self.intents[9]['specifics'][0]['company'][0]
+        result_array = self.model.predict([list(result[0].values())]).tolist()[0]
+        for item,score in zip(self.classes,result_array):
+            print(item+': '+str(score))
+        print(self.classes)
+        if max(result_array) > 0.6:
+            intentTag = self.classes[result_array.index(max(result_array))]
+        else:
+            intentTag = 'unknown'
+        return intentTag
 
 
-        sessionId = self.dbInsert(sessionId,message,responseMsg,context,previousContext)
-        print("Response:  "+responseMsg)
+    def getBotResponse(self,actualMessage,previousContext,sessionId):
+        response = ''
+        if sessionId == '' or sessionId == None:
+            response = self.checkIsItName(actualMessage)
+            context = ''
+            dataType = ''
+        else:
+            parser = GingerIt()
+            actualMessage = parser.parse(actualMessage)['result']
+            modelIntent = self.getModelResult(actualMessage,previousContext,sessionId)
+            for intent in self.intents:
+                if intent['tag'] == modelIntent:
+                    response = random.choice(intent['responses'])
+                    #print("Response:  "+responseMsg)
+                    context = intent['context']
+                    dataType = intent['type']
 
-        #test_X = vectorizer.transform([message])
-        #test_Y = tfTransformer.transform(test_X)
-        #predicted_svm = svmClassifier.predict(test_Y)
+                    print("Tag:  "+modelIntent)
+                    print("Context:  "+context)
+                    print("Data Type:  "+dataType)
 
-        #ft = vectorizer.get_feature_names()
-        #result = list(map(lambda row:dict(zip(ft,row)),test_Y.toarray()))
-        #result_array = model.predict([list(result[0].values())]).tolist()[0]
-        #returnClass = classes[result_array.index(max(result_array))]
-        #return (responseMsg,tag)
-        #return jsonify({"result":predicted_svm[0]})
+
+            response = self.checkPattern(actualMessage,context,previousContext,sessionId,response)
+
+        sessionId = self.dbInsert(sessionId,actualMessage,response,context,previousContext)
+        print("Response:  "+response)
+
         result = []
-        result.append(responseMsg)
+        result.append(response)
         result.append(context)
         result.append(sessionId)
         return result
@@ -297,7 +306,6 @@ class ResumeBot:
             sessionId = 1
         insertValues = (sessionId,userMessage,botResponse,respContext,prevContext,datetime.datetime.now())
         print(insertValues)
-        print(c.execute('''INSERT INTO conversations VALUES (?,?,?,?,?,?)''',insertValues))
         conn.commit()
         conn.close()
         return sessionId

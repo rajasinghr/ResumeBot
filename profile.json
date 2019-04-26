@@ -62,7 +62,7 @@
          "tag":"unknown",
          "patterns":["where did he do","when did he complete","in which location"],
          "responses":["Please be specific, I am newly employed"],
-         "context": "",
+         "context": "unknown",
          "type":""
        },
        {
