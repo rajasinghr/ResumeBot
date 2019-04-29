@@ -2,8 +2,10 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -25,6 +27,38 @@
       <input class="form-control" id="userMessage" type="text" placeholder="Type here . . .">
       <input hidden id="prevContext">
       <input hidden id="sessionId">
+
+
+    </div>
+
+
+
+    <div class="modal" id="myModal" style="width:1300px">
+      <div class="modal-dialog" style="width:800px">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="width:800px">
+          <div class="modal-header" style="width:800px">
+
+            <h4 class="modal-title">User Review</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body" style="width:800px">
+            <p>Please give us your survey based on the bot's response for your query.</p>
+  		 <div>
+  		 <button type="button" class="btn btn-success modelClose">Appropriate</button>
+
+  		<button type="button" class="btn btn-info modelClose">Partly Appropriate</button>
+  		<button type="button" class="btn btn-secondary modelClose">Not knowing</button>
+
+  		<button type="button" class="btn btn-warning modelClose">Partly Inappropriate</button>
+  		<button type="button" class="btn btn-danger modelClose">Inappropriate</button>
+  		</div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
 
   </div>
@@ -32,32 +66,59 @@
 
   <script>
     $(document).ready(function() {
-      $('#userMessage').focus()
-      $('#userMessage').keypress(function(e) {
-        if (e.key === 'Enter') {
-          var userMessage = $('#userMessage').val();
-          $('#userMessage').val('');
 
-          $("#chatWindow").append("<li align= 'right' class='list-group-item list-group-item-secondary'>" + userMessage + "</li>");
-          $.ajax({
-            url: '/getResponse',
-            data: {
-              'userMessage': userMessage,
-              'previousContext': $('#prevContext').val(),
-              'sessionId':$('#sessionId').val()
-            },
-            type: 'GET',
-            success: function(response) {
-                console.log(response);
-                $("#chatWindow").append("<li align= 'left' class='list-group-item list-group-item-primary'>" + response["result"][0] + "</li>");
-                $('#prevContext').val(response["result"][1]);
-                $('#sessionId').val(response["result"][2]);
-                var element = document.getElementById("chatWindow");
-                element.scrollTop = element.scrollHeight;
-            }
-          });
-        }
-      });
+      $('#userMessage').focus()
+$('#userMessage').keypress(function(e) {
+  if (e.key === 'Enter') {
+    var userMessage = $('#userMessage').val();
+    $('#userMessage').val('');
+
+    $("#chatWindow").append("<li align= 'right' class='list-group-item list-group-item-secondary'>" + userMessage + "</li>");
+    $.ajax({
+      url: '/getResponse',
+      data: {
+        'userMessage': userMessage,
+        'previousContext': $('#prevContext').val(),
+        'sessionId':$('#sessionId').val()
+      },
+      type: 'GET',
+      success: function(response) {
+          console.log(response);
+          $("#chatWindow").append("<li align= 'left' class='list-group-item list-group-item-primary'>" + response["result"][0] + "</li>");
+          $('#prevContext').val(response["result"][1]);
+          $('#sessionId').val(response["result"][2]);
+          var element = document.getElementById("chatWindow");
+          element.scrollTop = element.scrollHeight;
+          $('#myModal').modal('show');
+      }
+    });
+  }
+});
+
+$(".modelClose").click(function(e){
+   $('#myModal').modal('hide');
+   $('#userMessage').focus()
+    entries = $('li').slice(-2)
+    userMsg = entries[0].innerText
+    botResponse = entries[1].innerText
+    $.ajax({
+      url: '/storeSurvey',
+      data: {
+        'userMessage': userMsg,
+        'botResponse': botResponse,
+        'sessionId':$('#sessionId').val(),
+        'rating': e.target.innerText
+      },
+      type: 'GET',
+      success: function(response) {
+          console.log(response);
+      }
+    });
+
+ });
+
+
+
     });
   </script>
 </body>

@@ -2,41 +2,41 @@
         {"tag": "greeting",
          "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day","Hey, How are you doing?"],
          "responses": ["Hello, thanks for visiting", "Good to see you", "Hi there, how can I help?"],
-         "context": "",
+         "context": "greeting",
          "type":""
         },
         {"tag": "goodbye",
          "patterns": ["Bye", "See you later", "Goodbye"],
          "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."],
-         "context": "",
+         "context": "goodbye",
          "type":""
         },
         {"tag": "thanks",
          "patterns": ["Thanks", "Thank you", "That's helpful"],
          "responses": ["Happy to help!", "Any time!", "My pleasure"],
-         "context": "",
+         "context": "thanks",
          "type":""
         },
         {"tag": "education",
-         "patterns": ["Tell about your educational qualifications",
-            "education details of him","Tell about his education"],
-         "responses": ["Master's Degree - University of South Florida, Tampa, Florida. <br/>Bachelor's Degree - Saranathan College of Engineering, Trichy, India"],
+         "patterns": ["Tell about your educational qualifications", "educational background of him",
+            "education details of him","Tell about his education","What is his education details","What is his educational career"],
+         "responses": ["He is doing his Master's Degree at the University of South Florida, Tampa, Florida. <br/>He completed his Bachelor's Degree at Saranathan College of Engineering, Trichy, India with a GPA of 7.54 out of 10"],
          "context":"education",
          "type":"list"
         },
         {"tag": "bachelor",
          "patterns": ["Tell about his bachelor's education",
-            "which year did he complete his bachelor","When did he complete",
+            "which year did he complete his bachelor","When did he complete his bachelor degree",
             "where did he complete his bachelor",
             "what is his GPA in bachelor", "In which location did he do his bachelor","bachelor degree details"],
-         "responses":["Bachelor's Degree - Saranathan College of Engineering, Trichy, India"],
+         "responses":["He completed his Bachelor's Degree in Electronics and communication engineering at the Saranathan College of Engineering, Trichy, India in 2014. He scored a GPA of 7.54 out of 10"],
          "specifics": [
            {
-             "year":"May, 2014",
-             "location":"Trichy, Tamilnadu, India",
-             "major":"Electronics and Communication Engineering",
-             "university":"Anna University",
-             "gpa":"7.54 out of 10.0"
+             "year":"He graduated on May, 2014",
+             "location":"He did his bachelor's degree at the Saranathan College of Engineering, Trichy, Tamilnadu, India",
+             "major":"His degree major was Electronics and Communication Engineering",
+             "university":"He completed his degree from an accredited college of Anna University",
+             "gpa":"His GPA was 7.54 out of 10.0"
            }
          ],
          "context":"bachelor",
@@ -45,14 +45,14 @@
         {"tag": "master",
          "patterns": ["Tell about his master's education","which year did he complete his master degree","When did he complete",
          "what is his GPA in masters","where did he complete his master's","In which location did he do his master education", "master degree details"],
-         "responses":["Master's Degree - University of South Florida, Tampa, Florida"],
+         "responses":["He is pursuing his Master's Degree in Business Analytics and Information Systems at the University of South Florida, Tampa, Florida. His expected graduation date is May, 2020"],
          "specifics": [
            {
-             "year":"May, 2020",
-             "location":"Tampa, Florida",
-             "major":"Business Analytics and Information Systems",
-             "university":"University of South Florida",
-             "gpa":"3.91 out of 4.0"
+             "year":"His expected graduation date is May, 2020",
+             "location":"He is doing is Master's in Tampa, Florida",
+             "major":"His course major is Business Analytics and Information Systems",
+             "university":"He is pursuing his degree from the University of South Florida",
+             "gpa":"His GPA is 3.91 out of 4.0"
            }
          ],
          "context":"master",
@@ -67,7 +67,9 @@
        },
        {
          "tag":"skills",
-         "patterns": ["what are your core skills", "what are your primary skills", "what is your primary skillset"],
+         "patterns": ["what are his core skills", "what are your primary skills",
+           "what is your primary skillset","What are the skills does he know", "Does he have any knowledge in reporting",
+           "Does he have any knowledge in big data","Does he have any knowledge in machine learning"],
          "responses": ["My primary skills are Python, Big Data, Tableau, Machine Learning"],
          "specifics": [
            {
@@ -80,26 +82,53 @@
          "type":"data"
        },
        {
-         "tag":"past_experience",
-         "patterns":["tell us about your past work experience", "where did you work previously"],
-         "responses": ["I previously worked in Tata Consultancy Services Pvt. Ltd."],
+         "tag":"work_experience",
+         "patterns":["tell us about his work experience", "tell about his professional career","tell about his work career"],
+         "responses": ["I am currently working as a Graduate Assistant at the University of South Florida. <br/> I previously worked as BI Analyst at CareTech Solutions, India. <br/> Before that, I worked as BI Analyst at HTC Global Services, India"],
+         "context": "work_experience",
+         "type":"list"
+       },
+       {
+         "tag":"experience1",
+         "patterns":["tell us about your past work experience at HTC Global Services", "work experience at HTC Global Services",
+           "tell about his experience at HTC Global Services"],
+         "responses": ["I worked as BI Analyst at HTC Global Services, India."],
          "specifics": [
            {
              "start_date":["I joined on Aug, 2014"],
-             "end_date":["I resigned on May, 2018"],
-             "duration":["I worked at TCS for 4 years"],
-             "location":["I worked in Chennai"],
-             "company":["I worked in TCS Pvt. Ltd."],
-             "project":["I developed and maintained a tool called DocuMaker. I built a JAVA application to support that."]
+             "end_date":["I resigned on Oct, 2016"],
+             "duration":["I worked at HTC Global Services for 2 years"],
+             "location":["I worked at HTC Global Services, Chennai"],
+             "company":["I worked at HTC Global Services"],
+             "project":["I built data management solutions for three Non-Banking financial Companies using Informatica and Talend Tools"]
            }
          ],
-         "context": "past_experience",
+         "context": "experience1",
          "type":"data"
        },
        {
-         "tag":"current_experience",
-         "patterns":["where do you work currently", "where do you presently work","where do you work now"],
-         "responses": ["I am currently working as a Graduate Assistant at the University of South Florida"],
+         "tag":"experience2",
+         "patterns":["tell us about your past work experience at caretech solutions", "work experience at caretech solutions",
+                      "tell about his experience at caretech solutions"],
+         "responses": ["I previously worked as BI Analyst in CareTech Solutions, India."],
+         "specifics": [
+           {
+             "start_date":["I joined on Oct, 2016"],
+             "end_date":["I resigned on July, 2018"],
+             "duration":["I worked at CareTech Solutions for 2 years"],
+             "location":["I worked at CareTech Solutions, Chennai"],
+             "company":["I worked at CareTech Solutions"],
+             "project":["I developed and maintained a knowledge Base Management System using Python"]
+           }
+         ],
+         "context": "experience2",
+         "type":"data"
+       },
+       {
+         "tag":"experience3",
+         "patterns":["where do you work currently", "where do you presently work","where do you work now",
+           "tell about his experience on working at MyReviewers" ],
+         "responses": ["I am currently working as a Graduate Assistant at the University of South Florida. <br/> I am developing and maintaining a .NET application"],
          "specifics": [
            {
              "start_date":["I joined on Aug, 2018"],
@@ -107,10 +136,10 @@
              "duration":["I am working here for 9 months"],
              "location":["I am working in Tampa, Florida"],
              "company":["I am working at the University of South Florida"],
-             "project":["I grade student assignments"]
+             "project":["I build web pages and code APIs"]
            }
          ],
-         "context": "current_experience",
+         "context": "experience3",
          "type":"data"
        },
        {
@@ -136,10 +165,26 @@
        },
        {
         "tag": "aboutme",
-        "patterns": ["Who is he","what is his name","Tell about Raja Singh Ravi"],
+        "patterns": ["Who is he","what is his name","Tell about Raja Singh Ravi","what is he doing now"],
         "responses": ["Raja Singh Ravi, a graduate student from the University of South Florida."],
         "context": "",
         "type":""
-       }
+      },
+      {
+        "tag":"projects",
+        "patterns":["what are the projects you worked","tell about his project experience","say a few projects he worked",
+                  "tell about any one of the projects you worked"],
+        "responses": ["He worked on the folllowing projects: <br/>1) Sentiment Analysis on E-Commerce user reviews, performing feature extraction and predicting feature ratings. <br/>2) Implemented a Knowledge Base Management System for classifying tickets using Python. <br/>3) Developed a reporting platform for generating and distributing reports. <br/>And his recent project is, <br/>4) Built chatbots using NLP packages in python."],
+        "specifics": [
+          {
+                    "project1" : ["Sentiment Analysis on E-Commerce user reviews, performing feature extraction and predicting feature ratings; used NLTK, SKLearn and developed a working interactive UI prototype using Flask modules. <br/>You can click <a href='https://www.youtube.com/watch?v=ER71PdvYkQQ&feature=youtu.be'>here<a/> to see the video."],
+                    "project2" : ["Implemented a Knowledge Base Management System for classifying tickets using Support Vector Machine classifier and indexing manuals using Whoosh in Python. The application is integrated with a Ticketing system using Web APIs."],
+                    "project3" : ["Designed Chatbots to book a doctor appointment and raise support requests using NLP packages in Python."],
+                    "project4" : ["Involved in an Agile software design and development of a complete BI ETL and Reporting platform for generating and distributing thousands of reports to more than 110 hospitals in the USA."]
+          }
+        ],
+        "context": "projects",
+        "type":"list"
+      }
    ]
 }

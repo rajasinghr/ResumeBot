@@ -157,6 +157,8 @@ class ResumeBot:
                     response = self.intents[5]['specifics'][0]['gpa']
                 elif(word == 'major'):
                     response = self.intents[5]['specifics'][0]['major']
+                else:
+                    response = modelResponse
             return response
 
         if (currentContext == 'unknown' and previousContext == 'bachelor') or (currentContext == 'bachelor'):
@@ -171,41 +173,25 @@ class ResumeBot:
                     response = self.intents[4]['specifics'][0]['gpa']
                 elif(word == 'major'):
                     response = self.intents[4]['specifics'][0]['major']
+                else:
+                    response = modelResponse
             return response
 
         if (currentContext == 'unknown' and previousContext == 'skills') or (currentContext == 'skills'):
-            if "machine learning" in message:
+            if "machine learning" in actualMessage:
                 response = self.intents[7]['specifics'][0]['machine learning'][0]
-            elif "big data" in message:
+            elif "big data" in actualMessage:
                 response = self.intents[7]['specifics'][0]['big data'][0]
-            elif "reporting" in message:
+            elif "reporting" in actualMessage:
                 response = self.intents[7]['specifics'][0]['reporting'][0]
+            else:
+                response = modelResponse
             return response
 
-        if (currentContext == 'unknown' and previousContext == 'past_experience') or (currentContext == 'past_experience'):
-            for word,token in pos_tokens:
-                if((token == 'WRB' and word=='where') or (word=='location')):
-                    response = self.intents[8]['specifics'][0]['location'][0]
-                elif(token=='WDT'):
-                    response = self.intents[8]['specifics'][0]['university'][0]
-                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
-                    response = self.intents[8]['specifics'][0]['start_date'][0]
-                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
-                    response = self.intents[8]['specifics'][0]['end_date'][0]
-                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
-                    response = self.intents[8]['specifics'][0]['duration'][0]
-                elif(word == 'project' or word=='do'):
-                    response = self.intents[8]['specifics'][0]['project'][0]
-                elif(token=='WDT' and word == 'company'):
-                    response = self.intents[8]['specifics'][0]['company'][0]
-            return response
-
-        if (currentContext == 'unknown' and previousContext == 'current_experience') or (currentContext == 'current_experience'):
+        if (currentContext == 'unknown' and previousContext == 'experience1') or (currentContext == 'experience1'):
             for word,token in pos_tokens:
                 if((token == 'WRB' and word=='where') or (word=='location')):
                     response = self.intents[9]['specifics'][0]['location'][0]
-                elif(token=='WDT'):
-                    response = self.intents[9]['specifics'][0]['university'][0]
                 elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
                     response = self.intents[9]['specifics'][0]['start_date'][0]
                 elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
@@ -216,6 +202,44 @@ class ResumeBot:
                     response = self.intents[9]['specifics'][0]['project'][0]
                 elif(token=='WDT' and word == 'company'):
                     response = self.intents[9]['specifics'][0]['company'][0]
+                else:
+                    response = modelResponse
+            return response
+
+        if (currentContext == 'unknown' and previousContext == 'experience2') or (currentContext == 'experience2'):
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    response = self.intents[10]['specifics'][0]['location'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[10]['specifics'][0]['start_date'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[10]['specifics'][0]['end_date'][0]
+                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
+                    response = self.intents[10]['specifics'][0]['duration'][0]
+                elif(word == 'project' or word=='do'):
+                    response = self.intents[10]['specifics'][0]['project'][0]
+                elif(token=='WDT' and word == 'company'):
+                    response = self.intents[10]['specifics'][0]['company'][0]
+                else:
+                    response = modelResponse
+            return response
+
+        if (currentContext == 'unknown' and previousContext == 'experience3') or (currentContext == 'experience3'):
+            for word,token in pos_tokens:
+                if((token == 'WRB' and word=='where') or (word=='location')):
+                    response = self.intents[11]['specifics'][0]['location'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'start' in word])>0) or (len([True for word,tag in pos_tokens  if 'start' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[11]['specifics'][0]['start_date'][0]
+                elif(((token == 'WRB' and word=='when') and len([True for word,tag in pos_tokens  if 'end' in word])>0) or (len([True for word,tag in pos_tokens  if 'end' in word])>0 and len([True for word,tag in pos_tokens  if 'date' in word])>0)) :
+                    response = self.intents[11]['specifics'][0]['end_date'][0]
+                elif((word == 'duration') or ((token == 'WRB' and word=='how') and  len([True for word,tag in pos_tokens  if 'long' in word])>0) ):
+                    response = self.intents[11]['specifics'][0]['duration'][0]
+                elif(word == 'project' or word=='do'):
+                    response = self.intents[11]['specifics'][0]['project'][0]
+                elif(token=='WDT' and word == 'company'):
+                    response = self.intents[11]['specifics'][0]['company'][0]
+                else:
+                    response = modelResponse
             return response
 
         if response == '':
@@ -256,8 +280,11 @@ class ResumeBot:
             context = ''
             dataType = ''
         else:
-            parser = GingerIt()
-            actualMessage = parser.parse(actualMessage)['result']
+            try:
+                parser = GingerIt()
+                actualMessage = parser.parse(actualMessage+' ')['result']
+            except:
+                pass
             modelIntent = self.getModelResult(actualMessage,previousContext,sessionId)
             for intent in self.intents:
                 if intent['tag'] == modelIntent:
@@ -272,6 +299,8 @@ class ResumeBot:
 
 
             response = self.checkPattern(actualMessage,context,previousContext,sessionId,response)
+            if(response == None or response == ''):
+                response = self.intents['unknown']['responses']
 
         sessionId = self.dbInsert(sessionId,actualMessage,response,context,previousContext)
         print("Response:  "+response)
@@ -289,6 +318,26 @@ class ResumeBot:
         conn.commit()
         conn.close()
 
+    def dbSurveyCreate():
+        conn = sqlite3.connect('resume.db')
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS survey (sessionId integer PRIMARY KEY, userMessage text, botResponse text, rating text, insertedDate timestamp)''')
+        conn.commit()
+        conn.close()
+
+    def dbInsertSurvey(self,sessionId,userMessage,botResponse,rating):
+        conn = sqlite3.connect('resume.db')
+        c = conn.cursor()
+        insertValues = (sessionId,userMessage,botResponse,rating,datetime.datetime.now())
+        print(insertValues)
+        try:
+            c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
+            conn.commit()
+            conn.close()
+        except:
+            conn.close()
+
+
     def dbCreate(self):
         conn = sqlite3.connect('resume.db')
         c = conn.cursor()
@@ -299,15 +348,19 @@ class ResumeBot:
     def dbInsert(self,sessionId,userMessage,botResponse,respContext,prevContext):
         conn = sqlite3.connect('resume.db')
         c = conn.cursor()
-        if sessionId == None or sessionId == '':
-            c.execute('''SELECT MAX(sessionId) FROM conversations''')
-            sessionId = c.fetchone()[0]+1
-        elif sessionId == 0:
-            sessionId = 1
-        insertValues = (sessionId,userMessage,botResponse,respContext,prevContext,datetime.datetime.now())
-        print(insertValues)
-        conn.commit()
-        conn.close()
+        try:
+            if sessionId == None or sessionId == '':
+                c.execute('''SELECT MAX(sessionId) FROM conversations''')
+                sessionId = c.fetchone()[0]+1
+            elif sessionId == 0:
+                sessionId = 1
+            insertValues = (sessionId,userMessage,botResponse,respContext,prevContext,datetime.datetime.now())
+            print(insertValues)
+            c.execute('''INSERT INTO conversations VALUES (?,?,?,?,?,?)''',insertValues)
+            conn.commit()
+            conn.close()
+        except:
+            conn.close()
         return sessionId
 
 
@@ -348,6 +401,28 @@ def getResponse():
     print(actualMessage)
     result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
     return jsonify({"result":result})
+
+@app.route('/storeSurvey',methods=['GET'])
+def storeSurvey():
+    sessionId = ''
+    userMessage = ''
+    botResponse = ''
+    rating = ''
+    if 'userMessage' in request.args:
+        userMessage = request.args['userMessage']
+    if 'botResponse' in request.args:
+        botResponse = request.args['botResponse']
+    if 'sessionId' in request.args:
+        sessionId = request.args['sessionId']
+    if 'rating' in request.args:
+        rating = request.args['rating']
+    print(rating)
+    print(userMessage)
+    print(botResponse)
+    print(sessionId)
+    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
+    return "success"
+
 
 
 

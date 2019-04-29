@@ -1,3 +1,60 @@
+Exception on /storeSurvey [GET]
+Traceback (most recent call last):
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
+    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
+    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
+sqlite3.OperationalError: database is locked
+Exception on /storeSurvey [GET]
+Traceback (most recent call last):
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
+    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
+    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
+sqlite3.IntegrityError: UNIQUE constraint failed: survey.sessionId
+Exception on /storeSurvey [GET]
+Traceback (most recent call last):
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
+    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
+    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
+sqlite3.OperationalError: database is locked
 Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
@@ -12,10 +69,11 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 336, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 262, in getBotResponse
-    sessionId = self.dbInsert(sessionId,message,responseMsg,context,previousContext)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 394, in getResponse
+    if 'userMessage' in request.args:
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 295, in getBotResponse
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 177, in checkPattern
+    response = modelResponse
 NameError: name 'message' is not defined
 Exception on /getResponse [GET]
 Traceback (most recent call last):
@@ -31,109 +89,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 336, in getResponse
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 402, in getResponse
     result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 262, in getBotResponse
-    sessionId = self.dbInsert(sessionId,actualMessage,responseMsg,context,previousContext)
-NameError: name 'responseMsg' is not defined
-Exception on /getResponse [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 342, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 251, in getBotResponse
-    context = intent['context']
-UnboundLocalError: local variable 'intent' referenced before assignment
-Exception on /getResponse [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 342, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 254, in getBotResponse
-    response = self.checkPattern(actualMessage,context,previousContext,sessionId)
-UnboundLocalError: local variable 'context' referenced before assignment
-Exception on /getResponse [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 342, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 267, in getBotResponse
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 301, in getBotResponse
     response = self.checkPattern(actualMessage,context,previousContext,sessionId,response)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 143, in checkPattern
-    for word,token in pos_tokens:
-NameError: name 'pos_tokens' is not defined
-Exception on /getResponse [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 342, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 267, in getBotResponse
-    response = self.checkPattern(actualMessage,context,previousContext,sessionId,response)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 143, in checkPattern
-    for word,token in pos_tokens:
-NameError: name 'pos_tokens' is not defined
-Exception on /getResponse [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 342, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 267, in getBotResponse
-    response = self.checkPattern(actualMessage,context,previousContext,sessionId,response)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 133, in checkPattern
-    patternTag = '-->'.join(word+'->'+tag for word,tag in tags)
-NameError: name 'tags' is not defined
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 181, in checkPattern
+    if "machine learning" in message:
+NameError: name 'message' is not defined
