@@ -10,7 +10,7 @@
 
 <body>
   <div class="container">
-    <h2 class="form-signin-heading">Resumebot:-)</h2>
+    <h2 class="form-signin-heading">Resumebot:-)<span style='float:right;'><input type="checkbox" style='width:20px;height:20px' class="form-check-input" id="evaluationMode" name="evaluationMode" value="something">Evaluation Mode</span></h2>
 
 
     <br />
@@ -26,6 +26,7 @@
     <div class="col-xs-6">
       <input class="form-control" id="userMessage" type="text" placeholder="Type here . . .">
       <input hidden id="prevContext">
+      <input hidden id="prevDatatype">
       <input hidden id="sessionId">
 
 
@@ -74,12 +75,14 @@ $('#userMessage').keypress(function(e) {
     $('#userMessage').val('');
 
     $("#chatWindow").append("<li align= 'right' class='list-group-item list-group-item-secondary'>" + userMessage + "</li>");
+    console.log($('#prevDatatype').val())
     $.ajax({
       url: '/getResponse',
       data: {
         'userMessage': userMessage,
         'previousContext': $('#prevContext').val(),
-        'sessionId':$('#sessionId').val()
+        'sessionId':$('#sessionId').val(),
+        'previousDatatype':$('#prevDatatype').val()
       },
       type: 'GET',
       success: function(response) {
@@ -87,9 +90,14 @@ $('#userMessage').keypress(function(e) {
           $("#chatWindow").append("<li align= 'left' class='list-group-item list-group-item-primary'>" + response["result"][0] + "</li>");
           $('#prevContext').val(response["result"][1]);
           $('#sessionId').val(response["result"][2]);
+          $('#prevDatatype').val(response["result"][3]);
           var element = document.getElementById("chatWindow");
           element.scrollTop = element.scrollHeight;
-          $('#myModal').modal('show');
+          if($("#evaluationMode").prop('checked') == true)
+          {
+            $('#myModal').modal('show');
+          }
+
       }
     });
   }

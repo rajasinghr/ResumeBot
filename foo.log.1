@@ -1,4 +1,4 @@
-Exception on /storeSurvey [GET]
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -12,10 +12,14 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-TypeError: dbInsertSurvey() takes 4 positional arguments but 5 were given
-Exception on /storeSurvey [GET]
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 431, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 326, in getBotResponse
+    response = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 255, in checkPattern
+    nlp_ner = nlp(actualMessage.lower())
+NameError: name 'nlp' is not defined
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -29,10 +33,14 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-TypeError: dbInsertSurvey() takes 4 positional arguments but 5 were given
-Exception on /storeSurvey [GET]
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 433, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 328, in getBotResponse
+    response = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 268, in checkPattern
+    response += projects[entry] + '<br/>'
+IndexError: list index out of range
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -46,10 +54,12 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-TypeError: dbInsertSurvey() takes 4 positional arguments but 5 were given
-Exception on /storeSurvey [GET]
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 439, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 346, in getBotResponse
+    return result
+UnboundLocalError: local variable 'result' referenced before assignment
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -63,12 +73,12 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.IntegrityError: UNIQUE constraint failed: survey.sessionId
-Exception on /storeSurvey [GET]
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 439, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 346, in getBotResponse
+    return result
+UnboundLocalError: local variable 'result' referenced before assignment
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -82,12 +92,14 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.OperationalError: database is locked
-Exception on /storeSurvey [GET]
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 497, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 392, in getBotResponse
+    modelIntent = self.getModelResult(actualMessage,previousContext,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 365, in getModelResult
+    predicted_svm = svmClassifier.predict(test_Y)
+NameError: name 'svmClassifier' is not defined
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -101,12 +113,14 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.IntegrityError: UNIQUE constraint failed: survey.sessionId
-Exception on /storeSurvey [GET]
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 502, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 408, in getBotResponse
+    result = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 165, in checkPattern
+    response = self.intents[5]['specifics'][0]['year']
+IndexError: list index out of range
+Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -120,27 +134,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.OperationalError: database is locked
-Exception on /storeSurvey [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.OperationalError: database is locked
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 502, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 408, in getBotResponse
+    result = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 314, in checkPattern
+    response += projects[entry] + '<br/>'
+IndexError: list index out of range

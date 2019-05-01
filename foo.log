@@ -1,60 +1,3 @@
-Exception on /storeSurvey [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.OperationalError: database is locked
-Exception on /storeSurvey [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.IntegrityError: UNIQUE constraint failed: survey.sessionId
-Exception on /storeSurvey [GET]
-Traceback (most recent call last):
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 390, in storeSurvey
-    resumeBot.dbInsertSurvey(sessionId,userMessage,botResponse,rating)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 307, in dbInsertSurvey
-    c.execute('''INSERT INTO survey VALUES (?,?,?,?,?)''',insertValues)
-sqlite3.OperationalError: database is locked
 Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
@@ -69,12 +12,13 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 394, in getResponse
-    if 'userMessage' in request.args:
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 295, in getBotResponse
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 177, in checkPattern
-    response = modelResponse
-NameError: name 'message' is not defined
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 502, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 408, in getBotResponse
+    result = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 314, in checkPattern
+    response += projects[entry-1] + '<br/>'
+IndexError: list index out of range
 Exception on /getResponse [GET]
 Traceback (most recent call last):
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
@@ -89,10 +33,57 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 402, in getResponse
-    result = resumeBot.getBotResponse(actualMessage,previousContext,sessionId)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 301, in getBotResponse
-    response = self.checkPattern(actualMessage,context,previousContext,sessionId,response)
-  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 181, in checkPattern
-    if "machine learning" in message:
-NameError: name 'message' is not defined
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 534, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 440, in getBotResponse
+    result = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 333, in checkPattern
+    nlp = en_core_web_sm.load()
+  File "C:\Python\Python37\lib\site-packages\en_core_web_sm\__init__.py", line 12, in load
+    return load_model_from_init_py(__file__, **overrides)
+  File "C:\Python\Python37\lib\site-packages\spacy\util.py", line 190, in load_model_from_init_py
+    return load_model_from_path(data_path, meta, **overrides)
+  File "C:\Python\Python37\lib\site-packages\spacy\util.py", line 173, in load_model_from_path
+    return nlp.from_disk(model_path)
+  File "C:\Python\Python37\lib\site-packages\spacy\language.py", line 786, in from_disk
+    util.from_disk(path, deserializers, exclude)
+  File "C:\Python\Python37\lib\site-packages\spacy\util.py", line 611, in from_disk
+    reader(path / key)
+  File "C:\Python\Python37\lib\site-packages\spacy\language.py", line 782, in <lambda>
+    deserializers[name] = lambda p, proc=proc: proc.from_disk(p, exclude=["vocab"])
+  File "nn_parser.pyx", line 634, in spacy.syntax.nn_parser.Parser.from_disk
+  File "C:\Python\Python37\lib\site-packages\thinc\neural\_classes\model.py", line 371, in from_bytes
+    dest = getattr(layer, name)
+  File "C:\Python\Python37\lib\site-packages\thinc\describe.py", line 42, in __get__
+    data = obj._mem.add(key, shape)
+  File "C:\Python\Python37\lib\site-packages\thinc\check.py", line 151, in checked_function
+    return wrapped(*args, **kwargs)
+  File "C:\Python\Python37\lib\site-packages\thinc\neural\mem.py", line 48, in add
+    blob = self._get_blob(size)
+  File "C:\Python\Python37\lib\site-packages\thinc\neural\mem.py", line 62, in _get_blob
+    self._realloc(max(self._mem.shape[1], nr_req) * 2)
+  File "C:\Python\Python37\lib\site-packages\thinc\neural\mem.py", line 68, in _realloc
+    new_mem = self.ops.allocate((self._mem.shape[0], new_size))
+  File "ops.pyx", line 398, in thinc.neural.ops.NumpyOps.allocate
+MemoryError
+Exception on /getResponse [GET]
+Traceback (most recent call last):
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Python\Python37\lib\site-packages\flask\_compat.py", line 35, in reraise
+    raise value
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python\Python37\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 553, in getResponse
+    result = resumeBot.getBotResponse(actualMessage,previousContext,previousDatatype,sessionId)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 459, in getBotResponse
+    result = self.checkPattern(actualMessage,context,previousContext,prev_datatype,dataType,sessionId,response)
+  File "E:\USF\Courses\ISM6930-DSP\Projects\ResumeBot\main.py", line 191, in checkPattern
+    response = self.intents[1]['specifics'][0]['location']
+KeyError: 'specifics'

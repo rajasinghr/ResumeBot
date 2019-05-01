@@ -1,5 +1,5 @@
 {"intents": [
-        {"tag": "greeting",
+		{"tag": "greeting",
          "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day","Hey, How are you doing?"],
          "responses": ["Hello, thanks for visiting", "Good to see you", "Hi there, how can I help?"],
          "context": "greeting",
@@ -29,7 +29,7 @@
             "which year did he complete his bachelor","When did he complete his bachelor degree",
             "where did he complete his bachelor",
             "what is his GPA in bachelor", "In which location did he do his bachelor","bachelor degree details"],
-         "responses":["He completed his Bachelor's Degree in Electronics and communication engineering at the Saranathan College of Engineering, Trichy, India in 2014. He scored a GPA of 7.54 out of 10"],
+         "responses":["He completed his Bachelor's Degree in Electronics and communication engineering at the Saranathan College of Engineering, Trichy, India in 2014."],
          "specifics": [
            {
              "year":"He graduated on May, 2014",
@@ -43,9 +43,9 @@
          "type":"data"
         },
         {"tag": "master",
-         "patterns": ["Tell about his master's education","which year did he complete his master degree","When did he complete",
-         "what is his GPA in masters","where did he complete his master's","In which location did he do his master education", "master degree details"],
-         "responses":["He is pursuing his Master's Degree in Business Analytics and Information Systems at the University of South Florida, Tampa, Florida. His expected graduation date is May, 2020"],
+         "patterns": ["Tell about his master's education","which year did he complete his master degree",
+         "what is his GPA in masters","when will he complete his master's","In which location did he do his master education", "master degree details"],
+         "responses":["He is pursuing his Master's Degree in Business Analytics and Information Systems at the University of South Florida, Tampa, Florida."],
          "specifics": [
            {
              "year":"His expected graduation date is May, 2020",
@@ -73,9 +73,9 @@
          "responses": ["My primary skills are Python, Big Data, Tableau, Machine Learning"],
          "specifics": [
            {
-             "reporting":["I have experience on reporting tooks like Tableau, as a part of my curriculum and have done project as well"],
-             "big data":["I have knowledge and experience on working in Hadoop, PySpark and Hive"],
-             "machine learning":["I have the knowledge of building machine learning models like Neural networks, SVM, Ensembles"]
+             "reporting":["He has experience on reporting tooks like Tableau, as a part of my curriculum and have done project as well"],
+             "big data":["He has knowledge and experience on working in Hadoop, PySpark and Hive"],
+             "machine learning":["He has the knowledge of building machine learning models like Neural networks, SVM, Ensembles"]
            }
          ],
          "context": "skills",
@@ -84,7 +84,7 @@
        {
          "tag":"work_experience",
          "patterns":["tell us about his work experience", "tell about his professional career","tell about his work career"],
-         "responses": ["I am currently working as a Graduate Assistant at the University of South Florida. <br/> I previously worked as BI Analyst at CareTech Solutions, India. <br/> Before that, I worked as BI Analyst at HTC Global Services, India"],
+         "responses": ["He is currently working as a Graduate Assistant at the University of South Florida. <br/> He previously worked as BI Analyst at CareTech Solutions, India. <br/> Before that, He worked as BI Analyst at HTC Global Services, India"],
          "context": "work_experience",
          "type":"list"
        },
@@ -92,15 +92,15 @@
          "tag":"experience1",
          "patterns":["tell us about your past work experience at HTC Global Services", "work experience at HTC Global Services",
            "tell about his experience at HTC Global Services"],
-         "responses": ["I worked as BI Analyst at HTC Global Services, India."],
+         "responses": ["He worked as BI Analyst at HTC Global Services, India."],
          "specifics": [
            {
-             "start_date":["I joined on Aug, 2014"],
-             "end_date":["I resigned on Oct, 2016"],
-             "duration":["I worked at HTC Global Services for 2 years"],
-             "location":["I worked at HTC Global Services, Chennai"],
-             "company":["I worked at HTC Global Services"],
-             "project":["I built data management solutions for three Non-Banking financial Companies using Informatica and Talend Tools"]
+             "start_date":["He joined on Aug, 2014"],
+             "end_date":["He resigned on Oct, 2016"],
+             "duration":["He worked at HTC Global Services for 2 years"],
+             "location":["He worked at HTC Global Services, Chennai"],
+             "company":["He worked at HTC Global Services"],
+             "project":["He built data management solutions for three Non-Banking financial Companies using Informatica and Talend Tools"]
            }
          ],
          "context": "experience1",
@@ -110,15 +110,15 @@
          "tag":"experience2",
          "patterns":["tell us about your past work experience at caretech solutions", "work experience at caretech solutions",
                       "tell about his experience at caretech solutions"],
-         "responses": ["I previously worked as BI Analyst in CareTech Solutions, India."],
+         "responses": ["He previously worked as BI Analyst in CareTech Solutions, India."],
          "specifics": [
            {
-             "start_date":["I joined on Oct, 2016"],
-             "end_date":["I resigned on July, 2018"],
-             "duration":["I worked at CareTech Solutions for 2 years"],
-             "location":["I worked at CareTech Solutions, Chennai"],
-             "company":["I worked at CareTech Solutions"],
-             "project":["I developed and maintained a knowledge Base Management System using Python"]
+             "start_date":["He joined on Oct, 2016"],
+             "end_date":["He resigned on July, 2018"],
+             "duration":["He worked at CareTech Solutions for 2 years"],
+             "location":["He worked at CareTech Solutions, Chennai"],
+             "company":["He worked at CareTech Solutions"],
+             "project":["He developed and maintained a knowledge Base Management System using Python"]
            }
          ],
          "context": "experience2",
@@ -128,15 +128,15 @@
          "tag":"experience3",
          "patterns":["where do you work currently", "where do you presently work","where do you work now",
            "tell about his experience on working at MyReviewers" ],
-         "responses": ["I am currently working as a Graduate Assistant at the University of South Florida. <br/> I am developing and maintaining a .NET application"],
+         "responses": ["He is currently working as a Graduate Assistant at the University of South Florida. <br/> He is developing and maintaining a .NET application"],
          "specifics": [
            {
-             "start_date":["I joined on Aug, 2018"],
-             "end_date":["I am currently working here"],
-             "duration":["I am working here for 9 months"],
-             "location":["I am working in Tampa, Florida"],
-             "company":["I am working at the University of South Florida"],
-             "project":["I build web pages and code APIs"]
+             "start_date":["He joined on Aug, 2018"],
+             "end_date":["He is currently working here"],
+             "duration":["He is working here for 9 months"],
+             "location":["He is working in Tampa, Florida"],
+             "company":["He is working at the University of South Florida"],
+             "project":["He build web pages and code APIs"]
            }
          ],
          "context": "experience3",
@@ -145,27 +145,27 @@
        {
          "tag": "salary",
          "patterns": ["What is your expected Salary", "What is your expected"],
-         "responses": ["My expected salary is $80k/year"],
+         "responses": ["His expected salary is $120k/year"],
          "context": "salary",
          "type":"data"
        },
        {
          "tag": "relocation",
          "patterns": ["Are you willing to relocate","Are you open to relocation"],
-         "responses": ["Yes, I am open to relocation"],
+         "responses": ["Yes, He is open to relocation"],
          "context": "relocation",
          "type":"data"
        },
        {
          "tag": "sponsorship",
          "patterns": ["Will you be requiring sponsorship in the future"],
-         "responses": ["Yes, I require H1-B sponsorship in the future"],
+         "responses": ["Yes, He requires H1-B sponsorship in the future"],
          "context": "sponsorship",
          "type":"data"
        },
        {
         "tag": "aboutme",
-        "patterns": ["Who is he","what is his name","Tell about Raja Singh Ravi","what is he doing now"],
+        "patterns": ["Tell about Raja Singh Ravi","what is he doing now"],
         "responses": ["Raja Singh Ravi, a graduate student from the University of South Florida."],
         "context": "",
         "type":""
@@ -173,15 +173,12 @@
       {
         "tag":"projects",
         "patterns":["what are the projects you worked","tell about his project experience","say a few projects he worked",
-                  "tell about any one of the projects you worked"],
+                  "tell about any one of the projects you worked","anyone of the projects","tell about the first second third or fourth project"],
         "responses": ["He worked on the folllowing projects: <br/>1) Sentiment Analysis on E-Commerce user reviews, performing feature extraction and predicting feature ratings. <br/>2) Implemented a Knowledge Base Management System for classifying tickets using Python. <br/>3) Developed a reporting platform for generating and distributing reports. <br/>And his recent project is, <br/>4) Built chatbots using NLP packages in python."],
-        "specifics": [
-          {
-                    "project1" : ["Sentiment Analysis on E-Commerce user reviews, performing feature extraction and predicting feature ratings; used NLTK, SKLearn and developed a working interactive UI prototype using Flask modules. <br/>You can click <a href='https://www.youtube.com/watch?v=ER71PdvYkQQ&feature=youtu.be'>here<a/> to see the video."],
-                    "project2" : ["Implemented a Knowledge Base Management System for classifying tickets using Support Vector Machine classifier and indexing manuals using Whoosh in Python. The application is integrated with a Ticketing system using Web APIs."],
-                    "project3" : ["Designed Chatbots to book a doctor appointment and raise support requests using NLP packages in Python."],
-                    "project4" : ["Involved in an Agile software design and development of a complete BI ETL and Reporting platform for generating and distributing thousands of reports to more than 110 hospitals in the USA."]
-          }
+        "specifics": ["Sentiment Analysis on E-Commerce user reviews, performing feature extraction and predicting feature ratings; used NLTK, SKLearn and developed a working interactive UI prototype using Flask modules. <br/>You can click <a href='https://www.youtube.com/watch?v=ER71PdvYkQQ&feature=youtu.be'>here<a/> to see the video.",
+                    "Implemented a Knowledge Base Management System for classifying tickets using Support Vector Machine classifier and indexing manuals using Whoosh in Python. The application is integrated with a Ticketing system using Web APIs.",
+                    "Designed Chatbots to book a doctor appointment and raise support requests using NLP packages in Python.",
+                    "Involved in an Agile software design and development of a complete BI ETL and Reporting platform for generating and distributing thousands of reports to more than 110 hospitals in the USA."
         ],
         "context": "projects",
         "type":"list"
