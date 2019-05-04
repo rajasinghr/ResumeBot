@@ -77,7 +77,6 @@ class ResumeBot:
         except:
             pass
 
-
         summary = summary.replace('*','').replace('-',' ').replace('/',' ').replace("'",' ')
         summary_new = [word for word,tag in nltk.pos_tag(nltk.word_tokenize(summary.lower())) if tag not in ['CC','DT','EX','MD','PRP','IN','PRP$','RP','TO','UH']]
         tokens_summary = [str.lower().strip(string.punctuation) for str in summary_new if str not in self.stopwords]

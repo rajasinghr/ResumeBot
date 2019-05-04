@@ -73,7 +73,7 @@
          "responses": ["My primary skills are Python, Big Data, Tableau, Machine Learning"],
          "specifics": [
            {
-             "reporting":["He has experience on reporting tooks like Tableau, as a part of my curriculum and have done project as well"],
+             "reporting":["He has experience on reporting tooks like Tableau, as a part of his curriculum and have done project as well"],
              "big data":["He has knowledge and experience on working in Hadoop, PySpark and Hive"],
              "machine learning":["He has the knowledge of building machine learning models like Neural networks, SVM, Ensembles"]
            }
@@ -110,7 +110,7 @@
          "tag":"experience2",
          "patterns":["tell us about your past work experience at caretech solutions", "work experience at caretech solutions",
                       "tell about his experience at caretech solutions"],
-         "responses": ["He previously worked as BI Analyst in CareTech Solutions, India."],
+         "responses": ["He worked as a BI Analyst in CareTech Solutions, India. "],
          "specifics": [
            {
              "start_date":["He joined on Oct, 2016"],
